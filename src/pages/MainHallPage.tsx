@@ -50,9 +50,9 @@ export default function MainHallPage() {
                         Экскурсия №{e.number}
                       </span>
                       <span className="h-1 w-1 rounded-full bg-parchment-100/30" />
-                      <span className="font-mono text-xs text-parchment-100/55">{e.period}</span>
+                      <span className="num-mono text-xs text-parchment-100/55">{e.period}</span>
                       <span className="h-1 w-1 rounded-full bg-parchment-100/30" />
-                      <span className="font-mono text-xs text-parchment-100/55">{e.duration}</span>
+                      <span className="num-mono text-xs text-parchment-100/55">{e.duration}</span>
                     </div>
                     <h2 className="mt-4 heading-serif text-4xl text-parchment-50 md:text-5xl">
                       {e.title}
@@ -67,10 +67,10 @@ export default function MainHallPage() {
                     <ProgressRing visited={visitedStops} total={e.stops.length} />
                     {r ? (
                       <div className="text-right text-xs">
-                        <div className="font-mono uppercase tracking-[0.2em] text-accent-gold/80">
+                        <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
                           результат теста
                         </div>
-                        <div className="mt-1 heading-serif text-2xl text-parchment-50">
+                        <div className="num-display mt-1 text-3xl font-medium text-parchment-50">
                           {r.correct}/{r.total}
                         </div>
                       </div>
@@ -117,8 +117,8 @@ function ProgressRing({ visited, total }: { visited: number; total: number }) {
       </svg>
       <div className="absolute inset-0 grid place-items-center text-center">
         <div>
-          <div className="heading-serif text-lg leading-none text-parchment-50">{visited}</div>
-          <div className="font-mono text-[9px] uppercase tracking-[0.18em] text-parchment-100/40">
+          <div className="num-display text-xl font-semibold leading-none text-parchment-50">{visited}</div>
+          <div className="num-mono mt-0.5 text-[9px] uppercase tracking-[0.18em] text-parchment-100/45">
             / {total}
           </div>
         </div>

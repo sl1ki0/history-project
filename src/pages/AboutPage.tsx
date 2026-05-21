@@ -37,7 +37,7 @@ export default function AboutPage() {
                   <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
                     {c.label}
                   </div>
-                  <div className="mt-2 heading-serif text-xl text-parchment-50">{c.value}</div>
+                  <div className="num-display mt-2 text-xl font-medium text-parchment-50">{c.value}</div>
                 </li>
               ))}
             </ul>
@@ -62,10 +62,10 @@ export default function AboutPage() {
                   className="rounded-2xl border border-parchment-50/10 p-5"
                 >
                   <div className="flex items-baseline justify-between">
-                    <div className="font-mono text-xs text-accent-gold/80">
+                    <div className="num-mono text-xs text-accent-gold/80">
                       №{e.number} · {e.period}
                     </div>
-                    <div className="font-mono text-xs text-parchment-100/40">
+                    <div className="num-mono text-xs text-parchment-100/40">
                       {e.stops.length} остановок · {e.quiz.length} вопросов
                     </div>
                   </div>
@@ -100,11 +100,13 @@ export default function AboutPage() {
               Ваш прогресс
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <div className="heading-serif text-5xl text-parchment-50">{xp}</div>
-              <div className="text-sm text-parchment-100/50">XP</div>
+              <div className="num-display text-5xl font-semibold text-parchment-50">{xp}</div>
+              <div className="text-sm uppercase tracking-[0.2em] text-parchment-100/50">XP</div>
             </div>
             <div className="mt-1 text-sm text-parchment-100/55">
-              Правильных ответов: {totalCorrect} из {totalQ || '—'}
+              Правильных ответов:{' '}
+              <span className="num-display font-medium text-parchment-50">{totalCorrect}</span> из{' '}
+              <span className="num-display font-medium text-parchment-50">{totalQ || '—'}</span>
             </div>
             <div className="mt-5 space-y-2">
               <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">

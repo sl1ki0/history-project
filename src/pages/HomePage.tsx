@@ -104,7 +104,7 @@ function Pillars() {
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               {it.label}
             </div>
-            <div className="mt-2 heading-serif text-2xl text-parchment-50 md:text-3xl">
+            <div className="num-display mt-2 text-2xl font-medium text-parchment-50 md:text-3xl">
               {it.value}
             </div>
           </motion.div>
@@ -139,10 +139,10 @@ function Preview() {
               className="card-exhibit block h-full transition hover:border-accent-gold/40 hover:shadow-[0_0_60px_-20px_rgba(201,162,90,0.4)]"
             >
               <div className="flex items-baseline justify-between">
-                <span className="font-mono text-xs text-accent-gold/70">
+                <span className="num-marker text-xl text-accent-gold/80">
                   №{String(e.number).padStart(2, '0')}
                 </span>
-                <span className="font-mono text-xs text-parchment-100/45">{e.period}</span>
+                <span className="num-mono text-xs text-parchment-100/50">{e.period}</span>
               </div>
               <h3 className="mt-4 heading-serif text-3xl text-parchment-50">{e.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-parchment-100/65">{e.subtitle}</p>

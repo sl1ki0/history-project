@@ -87,8 +87,8 @@ export default function QuizPage() {
             aria-label={`Вопрос ${i + 1}`}
           />
         ))}
-        <div className="ml-3 font-mono text-xs text-parchment-100/55">
-          {activeQ + 1} / {total}
+        <div className="ml-3 num-mono text-xs text-parchment-100/55">
+          <span className="text-parchment-50">{activeQ + 1}</span> / {total}
         </div>
       </div>
 
@@ -215,13 +215,13 @@ function ResultView({
         >
           <div className="mx-auto grid h-44 w-44 place-items-center rounded-full border-2 border-accent-gold/40">
             <div>
-              <div className="heading-serif text-6xl text-parchment-50">{correct}</div>
-              <div className="font-mono text-xs uppercase tracking-[0.25em] text-parchment-100/50">
+              <div className="num-display text-6xl font-semibold text-parchment-50">{correct}</div>
+              <div className="num-mono mt-1 text-xs uppercase tracking-[0.25em] text-parchment-100/50">
                 из {total}
               </div>
             </div>
           </div>
-          <div className="mt-6 heading-serif text-2xl text-parchment-50">{pct}% верно</div>
+          <div className="mt-6 num-display text-2xl font-semibold text-parchment-50">{pct}% верно</div>
           <p className="mt-2 text-sm text-parchment-100/65">{verdict.text}</p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">

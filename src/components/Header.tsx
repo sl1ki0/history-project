@@ -44,9 +44,10 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 rounded-full border border-accent-gold/30 bg-accent-gold/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] text-accent-gold">
+          <div className="hidden sm:flex items-center gap-2 rounded-full border border-accent-gold/30 bg-accent-gold/10 px-3 py-1.5 text-accent-gold">
             <span className="grid h-1.5 w-1.5 place-items-center rounded-full bg-accent-gold shadow-[0_0_8px_2px_rgba(201,162,90,0.7)]" />
-            {xp} XP
+            <span className="num-display text-sm font-semibold">{xp}</span>
+            <span className="text-[10px] uppercase tracking-[0.25em] opacity-80">XP</span>
           </div>
           {location.pathname !== '/hall' && (
             <Link to="/hall" className="btn-ghost">

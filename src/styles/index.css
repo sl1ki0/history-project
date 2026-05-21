@@ -84,6 +84,31 @@
            text-[11px] uppercase tracking-[0.2em] text-accent-gold;
   }
 
+  /* Big display numbers — Inter, tabular, tight tracking. Used for period, duration, big indices. */
+  .num-display {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'tnum' 1, 'lnum' 1, 'ss01' 1;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Small mono numbers — used in plan rows, dates */
+  .num-mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-feature-settings: 'tnum' 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  /* Index marker — big roman-ish numeric in serif, gold */
+  .num-marker {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+    letter-spacing: -0.02em;
+    font-feature-settings: 'lnum' 1;
+  }
+
   .card-exhibit {
     @apply relative overflow-hidden rounded-3xl border border-parchment-50/10 bg-ink-900/60 p-6 md:p-8;
   }

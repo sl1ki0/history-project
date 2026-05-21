@@ -164,22 +164,7 @@ function Artifact({ kind, accentColor, animated }: Props) {
         </mesh>
       )}
 
-      {kind === 'medal' && (
-        <>
-          <mesh castShadow>
-            <torusGeometry args={[0.95, 0.13, 32, 96]} />
-            {goldRim}
-          </mesh>
-          <mesh>
-            <circleGeometry args={[0.82, 64]} />
-            <meshStandardMaterial color={accentColor} metalness={0.85} roughness={0.25} />
-          </mesh>
-          <mesh position={[0, 1.05, 0]}>
-            <torusGeometry args={[0.35, 0.05, 12, 48, Math.PI]} />
-            <meshStandardMaterial color="#9b1d20" />
-          </mesh>
-        </>
-      )}
+      {kind === 'medal' && <SochiMedal />}
 
       {kind === 'globe' && (
         <>
@@ -239,5 +224,149 @@ function Artifact({ kind, accentColor, animated }: Props) {
         </mesh>
       )}
     </group>
+  )
+}
+
+/**
+ * Sochi-2014 inspired Olympic medal: a thick gold disc with a recessed center
+ * filled with a multicolor patchwork ("лоскутное одеяло"), a thick suspension ring,
+ * and a tricolor ribbon.
+ */
+function SochiMedal() {
+  const ref = useRef<THREE.Group>(null!)
+  useFrame((_, dt) => {
+    if (ref.current) ref.current.rotation.y += dt * 0.35
+  })
+
+  // Patchwork wedges colors — symbolic of Russian ethnic-pattern "blanket"
+  const patchColors = useMemo(
+    () => [
+      '#c9a25a', '#a44b2a', '#1c4587', '#9b1d20',
+      '#4a1f1f', '#e3d3b1', '#574f3e', '#c9a25a',
+      '#a44b2a', '#1c4587', '#9b1d20', '#e3d3b1',
+    ],
+    [],
+  )
+
+  return (
+    <group ref={ref} rotation={[0, 0, 0]}>
+      {/* Ribbon — three vertical stripes mimicking tricolor */}
+      <group position={[0, 1.2, -0.02]}>
+        <mesh position={[-0.18, 0, 0]} castShadow>
+          <boxGeometry args={[0.16, 0.95, 0.03]} />
+          <meshStandardMaterial color="#f3eddf" roughness={0.7} />
+        </mesh>
+        <mesh position={[0, 0, 0]} castShadow>
+          <boxGeometry args={[0.16, 0.95, 0.03]} />
+          <meshStandardMaterial color="#1c4587" roughness={0.7} />
+        </mesh>
+        <mesh position={[0.18, 0, 0]} castShadow>
+          <boxGeometry args={[0.16, 0.95, 0.03]} />
+          <meshStandardMaterial color="#9b1d20" roughness={0.7} />
+        </mesh>
+      </group>
+
+      {/* Suspension ring */}
+      <mesh position={[0, 0.92, 0]} castShadow>
+        <torusGeometry args={[0.13, 0.04, 16, 48]} />
+        <meshStandardMaterial color="#c9a25a" metalness={1} roughness={0.18} />
+      </mesh>
+
+      {/* Outer medal disc — gold rim */}
+      <mesh castShadow rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[1.05, 1.05, 0.12, 96]} />
+        <meshPhysicalMaterial
+          color="#d4af5e"
+          metalness={1}
+          roughness={0.22}
+          clearcoat={0.5}
+          clearcoatRoughness={0.3}
+        />
+      </mesh>
+
+      {/* Inner recessed plate — slightly inset */}
+      <mesh position={[0, 0, 0.07]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.78, 0.78, 0.02, 96]} />
+        <meshStandardMaterial color="#0f0d0a" metalness={0.4} roughness={0.5} />
+      </mesh>
+
+      {/* Patchwork "blanket" — pie wedges of color inside the recess */}
+      <group position={[0, 0, 0.082]}>
+        {patchColors.map((color, i) => {
+          const segments = patchColors.length
+          const startAngle = (i / segments) * Math.PI * 2
+          const wedgeAngle = (Math.PI * 2) / segments
+          return (
+            <PatchWedge
+              key={i}
+              color={color}
+              startAngle={startAngle}
+              wedgeAngle={wedgeAngle}
+              radius={0.74}
+            />
+          )
+        })}
+      </group>
+
+      {/* Central engraving — five rings hint (Olympic motif), stylized */}
+      <mesh position={[0, 0, 0.092]}>
+        <torusGeometry args={[0.18, 0.012, 12, 48]} />
+        <meshStandardMaterial color="#c9a25a" metalness={1} roughness={0.1} />
+      </mesh>
+      <mesh position={[0, 0, 0.092]}>
+        <torusGeometry args={[0.32, 0.012, 12, 48]} />
+        <meshStandardMaterial color="#c9a25a" metalness={1} roughness={0.1} />
+      </mesh>
+
+      {/* Engraved «SOCHI 2014» wreath dots around outer edge */}
+      {[...Array(24)].map((_, i) => {
+        const a = (i / 24) * Math.PI * 2
+        return (
+          <mesh
+            key={i}
+            position={[Math.cos(a) * 0.92, Math.sin(a) * 0.92, 0.075]}
+          >
+            <sphereGeometry args={[0.012, 8, 8]} />
+            <meshStandardMaterial color="#fff7df" metalness={1} roughness={0.2} />
+          </mesh>
+        )
+      })}
+    </group>
+  )
+}
+
+/** A single colored wedge inside the medal patchwork. */
+function PatchWedge({
+  color,
+  startAngle,
+  wedgeAngle,
+  radius,
+}: {
+  color: string
+  startAngle: number
+  wedgeAngle: number
+  radius: number
+}) {
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape()
+    shape.moveTo(0, 0)
+    const steps = 12
+    for (let i = 0; i <= steps; i++) {
+      const a = startAngle + (i / steps) * wedgeAngle
+      shape.lineTo(Math.cos(a) * radius, Math.sin(a) * radius)
+    }
+    shape.lineTo(0, 0)
+    return new THREE.ShapeGeometry(shape)
+  }, [startAngle, wedgeAngle, radius])
+
+  return (
+    <mesh geometry={geometry}>
+      <meshStandardMaterial
+        color={color}
+        metalness={0.3}
+        roughness={0.55}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
   )
 }
