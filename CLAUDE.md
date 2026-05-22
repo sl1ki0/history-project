@@ -41,6 +41,7 @@ src/
 │   ├── PortalScene.tsx    Hero landing background
 │   └── Artifact.tsx       Legacy per-stop artifacts (currently unused, kept for ref)
 ├── hooks/useNarration.ts  Two-engine TTS: Web Speech + Piper VITS
+├── hooks/NarrationContext.tsx  Provider that shares one useNarration instance
 ├── store/progress.ts      Zustand + persist (visitedStops, quizResults, XP, badges)
 ├── utils/ttsNormalize.ts  Russian text → spoken words (years, dates, %, ranges)
 └── styles/index.css       Tailwind layers + .num-display / .num-mono / .num-marker
@@ -118,6 +119,43 @@ node positions. This makes «Дальше» feel like flying along the
 timeline. Don't replace with `positions[i]` lerp — UX regressed
 visibly when that happened.
 
+### 9. Narration is provider-scoped, not per-component
+
+`ExcursionPage` wraps its tree in `<NarrationProvider>` (from
+`hooks/NarrationContext.tsx`) and shares a single `useNarration`
+instance. Components inside that tree (`NarrationControls`,
+`AutoTourBar`, anything new) must use `useNarrationContext()` —
+calling `useNarration()` directly creates a second instance that
+double-writes to localStorage and desynchronizes playback state.
+
+### 10. Sequence playback uses run-id cancellation
+
+`prepareSequence(segments)` pre-generates Piper Blobs (no-op for
+Web Speech apart from progress callbacks); `playSequence(segments,
+opts)` plays them in order with a `DEFAULT_PARAGRAPH_GAP_MS = 650`
+pause and fires `onSegmentEnd` / `onComplete` / `onCancel`.
+Cancellation is cooperative: `stop()` bumps `sequenceRunIdRef` and
+any in-flight loop bails on its next tick. The auto-tour in
+`ExcursionPage` uses the same pattern with its own `tourRunIdRef`
+— never `await` across long gaps without re-checking the id.
+
+### 11. Piper Blob cache is per-hook-instance
+
+Pre-generated audio (`piperCacheRef` inside `useNarration`) is
+keyed by segment id and invalidated whenever `setPiperVoice` runs.
+Unmounting the provider (e.g. leaving `ExcursionPage`) discards the
+cache entirely — there is no cross-page persistence. Don't rely on
+prep surviving a route change.
+
+### 12. `TimelineScene.onCameraArrived` needs a failsafe
+
+Fires once per `activeIndex` when `|targetT − currentT| < 0.0035`
+in `CameraFollow`. If the canvas is offscreen or paused, `useFrame`
+may stop ticking, so any caller awaiting arrival must wrap it in a
+timeout (`ExcursionPage` uses `CAMERA_TIMEOUT_MS = 4000`). Also
+set `selectable={false}` on the scene to lock node clicks during
+the auto-tour.
+
 ## Code style
 
 - TypeScript strict; no `any` without justification
@@ -154,3 +192,7 @@ visibly when that happened.
   iOS 15.2+ / macOS 15.2+
 - WebGL context loss happens occasionally when HMR rebuilds R3F
   Canvas — R3F restores automatically, ignore the console line
+- Don't auto-click the «Запустить аудиоэкскурсию» CTA in browser
+  tests — it triggers a ~60 MB Piper model download and starts
+  audio playback on the user's machine. Verify the tour by reading
+  interactive elements only.
