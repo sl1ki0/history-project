@@ -20,6 +20,10 @@ interface TimelineSceneProps {
   accentColor: string
   /** If true, disable continuous motion (prefers-reduced-motion) */
   reducedMotion?: boolean
+  /** Disable click selection — used in locked auto-tour mode. */
+  selectable?: boolean
+  /** Fires once after the camera flies in to a new activeIndex. */
+  onCameraArrived?: (index: number) => void
 }
 
 /**
@@ -47,6 +51,8 @@ function Scene({
   onSelect,
   accentColor,
   reducedMotion,
+  selectable = true,
+  onCameraArrived,
 }: TimelineSceneProps) {
   // Path geometry: spread nodes along an S-curve with depth + height variation
   const positions = useMemo(() => {
@@ -101,9 +107,10 @@ function Scene({
           data={nodes[i]}
           index={i}
           isActive={i === activeIndex}
-          onClick={() => onSelect(i)}
+          onClick={() => selectable && onSelect(i)}
           accentColor={accentColor}
           animated={!reducedMotion}
+          selectable={selectable}
         />
       ))}
 
@@ -112,6 +119,7 @@ function Scene({
           curve={curve}
           nodeCount={nodes.length}
           activeIndex={activeIndex}
+          onArrived={onCameraArrived}
         />
       )}
     </>
@@ -259,6 +267,7 @@ interface NodeProps {
   onClick: () => void
   accentColor: string
   animated: boolean
+  selectable?: boolean
 }
 
 function TimelineNode({
@@ -268,6 +277,7 @@ function TimelineNode({
   onClick,
   accentColor,
   animated,
+  selectable = true,
 }: NodeProps) {
   const groupRef = useRef<THREE.Group>(null!)
   const [hovered, setHovered] = useState(false)
@@ -327,10 +337,11 @@ function TimelineNode({
         <mesh
           onPointerDown={(e) => {
             stop(e)
-            onClick()
+            if (selectable) onClick()
           }}
           onPointerOver={(e) => {
             stop(e)
+            if (!selectable) return
             setHovered(true)
             document.body.style.cursor = 'pointer'
           }}
@@ -398,10 +409,12 @@ function CameraFollow({
   curve,
   nodeCount,
   activeIndex,
+  onArrived,
 }: {
   curve: THREE.CatmullRomCurve3
   nodeCount: number
   activeIndex: number
+  onArrived?: (index: number) => void
 }) {
   const { camera } = useThree()
 
@@ -421,6 +434,9 @@ function CameraFollow({
   const smoothedLook = useMemo(() => new THREE.Vector3(), [])
   const onCurve = useMemo(() => new THREE.Vector3(), [])
   const ahead = useMemo(() => new THREE.Vector3(), [])
+
+  // Whether we have already fired onArrived for the current activeIndex.
+  const arrivedRef = useRef<number | null>(null)
 
   useFrame((state) => {
     // Distance to target — speed up large jumps, slow down for small adjustments
@@ -456,6 +472,15 @@ function CameraFollow({
     lookTarget.y += 0.2
     smoothedLook.lerp(lookTarget, 0.18)
     camera.lookAt(smoothedLook)
+
+    // Arrival check — fire callback once we've effectively reached the target.
+    if (absDiff < 0.0035 && arrivedRef.current !== activeIndex) {
+      arrivedRef.current = activeIndex
+      onArrived?.(activeIndex)
+    } else if (absDiff > 0.02 && arrivedRef.current === activeIndex) {
+      // target changed — reset so we'll re-fire when we land at the new one
+      arrivedRef.current = null
+    }
   })
 
   return null

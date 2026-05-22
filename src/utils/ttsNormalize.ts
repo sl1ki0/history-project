@@ -193,11 +193,45 @@ function stripThousandSep(s: string): string {
 
 /* ─────────────── master normalizer ─────────────── */
 
+/** Multi-letter abbreviations that engines often mangle — spell them out. */
+const ABBR_MAP: Record<string, string> = {
+  СССР: 'эс-эс-эс-эр',
+  РСФСР: 'эр-эс-эф-эс-эр',
+  РФ: 'эр-эф',
+  СНГ: 'эс-эн-гэ',
+  США: 'сэ-шэ-а',
+  ООН: 'оо́н',
+  НАТО: 'на́то',
+  ЕС: 'е-эс',
+  ВВП: 'вэ-вэ-пэ',
+  ЦБ: 'цэ-бэ',
+  МВД: 'эм-вэ-дэ',
+  ФСБ: 'эф-эс-бэ',
+  МВФ: 'эм-вэ-эф',
+  ВТО: 'вэ-тэ-о',
+}
+
 export function normalizeForTTS(input: string): string {
   let text = input
 
   // 1) Strip footnote markers like [12]
   text = text.replace(/\[\d+\]/g, '')
+
+  // 1a) Expand well-known multi-letter abbreviations so engines don't read them as one word
+  for (const [abbr, spelled] of Object.entries(ABBR_MAP)) {
+    text = text.replace(new RegExp(`\\b${abbr}\\b`, 'g'), spelled)
+  }
+
+  // 1b) Common date / measure short forms: "1991 г.", "1992–1999 гг."
+  text = text.replace(/\bгг\./g, 'годы')
+  text = text.replace(/(\d{4})\s*г\./g, '$1 года')
+  text = text.replace(/\bтыс\./g, 'тысяч')
+  text = text.replace(/\bмлн\.?/g, 'миллионов')
+  text = text.replace(/\bмлрд\.?/g, 'миллиардов')
+
+  // 1c) Initials "Б. Н. Ельцин" — drop the dots so engines don't pause/abort each letter
+  text = text.replace(/\b([А-ЯЁ])\.\s*([А-ЯЁ])\.\s*([А-ЯЁ][а-яё]+)/g, '$1 $2 $3')
+  text = text.replace(/\b([А-ЯЁ])\.\s*([А-ЯЁ][а-яё]+)/g, '$1 $2')
 
   // 2) Symbol words (keep dashes for now — they help distinguish ranges)
   text = text.replace(/≈/g, 'примерно ')

@@ -1,4 +1,5 @@
-import { useNarration, PIPER_VOICES } from '../hooks/useNarration'
+import { PIPER_VOICES } from '../hooks/useNarration'
+import { useNarrationContext } from '../hooks/NarrationContext'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -7,9 +8,19 @@ interface Props {
   /** restart speech each time this key changes */
   reKey?: string | number
   autoPlay?: boolean
+  /** When true, hide the playback buttons (tour controller drives playback). */
+  hidePlayback?: boolean
+  /** When true, lock engine/voice selection (used during the auto-tour). */
+  lockEngine?: boolean
 }
 
-export default function NarrationControls({ text, reKey, autoPlay = false }: Props) {
+export default function NarrationControls({
+  text,
+  reKey,
+  autoPlay = false,
+  hidePlayback = false,
+  lockEngine = false,
+}: Props) {
   const {
     status,
     supported,
@@ -20,24 +31,25 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
     piperProgress,
     rate,
     setRate,
+    volume,
+    setVolume,
     speak,
     pause,
     resume,
     stop,
-  } = useNarration()
+  } = useNarrationContext()
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   useEffect(() => {
     if (!supported) return
+    if (hidePlayback) return
     stop()
     if (autoPlay) {
       const t = setTimeout(() => speak(text), 400)
       return () => clearTimeout(t)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reKey, supported])
-
-  useEffect(() => () => stop(), [stop])
+  }, [reKey, supported, hidePlayback])
 
   if (!supported) {
     return (
@@ -52,7 +64,7 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
-        {!isLoading && status !== 'speaking' && (
+        {!hidePlayback && !isLoading && status !== 'speaking' && (
           <button
             onClick={() => (status === 'paused' ? resume() : speak(text))}
             className="btn-ghost"
@@ -60,17 +72,17 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
             <PlayIcon /> {status === 'paused' ? 'Продолжить' : 'Озвучить'}
           </button>
         )}
-        {status === 'speaking' && (
+        {!hidePlayback && status === 'speaking' && (
           <button onClick={pause} className="btn-ghost">
             <PauseIcon /> Пауза
           </button>
         )}
-        {(status === 'speaking' || status === 'paused') && (
+        {!hidePlayback && (status === 'speaking' || status === 'paused') && (
           <button onClick={stop} className="btn-ghost">
             <StopIcon /> Стоп
           </button>
         )}
-        {isLoading && (
+        {!hidePlayback && isLoading && (
           <button disabled className="btn-ghost opacity-70">
             <Spinner />{' '}
             {piperProgress !== null
@@ -112,16 +124,18 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
               <div className="mt-3 flex flex-col gap-2">
                 <EngineCard
                   active={engine === 'webspeech'}
-                  onClick={() => setEngine('webspeech')}
+                  onClick={() => !lockEngine && setEngine('webspeech')}
                   title="Системный"
                   desc="Голос ОС/браузера · мгновенно"
+                  disabled={lockEngine}
                 />
                 <EngineCard
                   active={engine === 'piper'}
-                  onClick={() => setEngine('piper')}
+                  onClick={() => !lockEngine && setEngine('piper')}
                   title="Студийный (нейросеть)"
                   desc="Piper VITS · модель ~60 МБ, загружается один раз и кешируется"
                   premium
+                  disabled={lockEngine}
                 />
               </div>
 
@@ -134,12 +148,13 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
                     {PIPER_VOICES.map((v) => (
                       <button
                         key={v.id}
-                        onClick={() => setPiperVoice(v.id)}
+                        onClick={() => !lockEngine && setPiperVoice(v.id)}
+                        disabled={lockEngine}
                         className={`rounded-xl border px-3 py-2 text-left text-xs transition ${
                           piperVoice === v.id
                             ? 'border-accent-gold bg-accent-gold/15 text-parchment-50'
                             : 'border-parchment-50/10 text-parchment-100/70 hover:border-parchment-50/30'
-                        }`}
+                        } ${lockEngine ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="font-medium">{v.label}</div>
                         <div className="text-[10px] uppercase tracking-wider text-parchment-100/45">
@@ -170,6 +185,33 @@ export default function NarrationControls({ text, reKey, autoPlay = false }: Pro
                   className="mt-2 w-full accent-accent-gold"
                 />
               </div>
+
+              <div className="mt-4">
+                <div className="flex items-baseline justify-between">
+                  <div className="text-[10px] uppercase tracking-[0.25em] text-parchment-100/55">
+                    Громкость
+                  </div>
+                  <div className="num-mono text-xs text-parchment-50">
+                    {Math.round(volume * 100)}%
+                  </div>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={volume}
+                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  className="mt-2 w-full accent-accent-gold"
+                />
+              </div>
+
+              {lockEngine && (
+                <div className="mt-3 rounded-xl border border-accent-gold/25 bg-accent-gold/5 px-3 py-2 text-[11px] leading-relaxed text-parchment-100/70">
+                  Во время автогида выбор голоса заблокирован — он зафиксирован
+                  пред-сгенерированной озвучкой.
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -184,21 +226,24 @@ function EngineCard({
   title,
   desc,
   premium,
+  disabled,
 }: {
   active: boolean
   onClick: () => void
   title: string
   desc: string
   premium?: boolean
+  disabled?: boolean
 }) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`flex w-full items-start justify-between gap-3 rounded-xl border px-4 py-3 text-left transition ${
         active
           ? 'border-accent-gold bg-accent-gold/15'
           : 'border-parchment-50/10 hover:border-parchment-50/30 hover:bg-parchment-50/5'
-      }`}
+      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <div>
         <div className="flex items-center gap-2">
