@@ -8,11 +8,14 @@ import * as THREE from 'three'
  * stars background, and parallax mouse follow. Performant by default.
  */
 export default function PortalScene() {
+  const isMobile =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(max-width: 640px)').matches
   return (
     <Canvas
       dpr={[1, 1.75]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ position: [0, 0, 7.4], fov: 42 }}
+      camera={{ position: [0, 0, 7.4], fov: isMobile ? 56 : 42 }}
     >
       <Suspense fallback={null}>
         <ambientLight intensity={0.4} />

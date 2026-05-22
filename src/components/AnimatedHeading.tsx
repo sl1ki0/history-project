@@ -53,9 +53,9 @@ export default function AnimatedHeading({ text, eyebrow, className = '', delay =
           {eyebrow}
         </div>
       )}
-      <Tag className="heading-serif text-balance">
+      <Tag className="heading-serif text-balance break-words">
         {text.split(' ').map((word, wi) => (
-          <span key={wi} className="inline-block whitespace-nowrap">
+          <span key={wi} className="inline-block max-w-full">
             {word.split('').map((ch, ci) => (
               <span key={ci} className="gsap-char">
                 {ch}

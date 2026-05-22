@@ -10,18 +10,18 @@ export default function MainHallPage() {
   const visited = useProgress((s) => s.visitedStops)
 
   return (
-    <PageTransition className="container-prose py-16">
+    <PageTransition className="container-prose py-10 md:py-16">
       <AnimatedHeading
         eyebrow="главный зал"
         text="Выберите маршрут"
-        className="text-5xl md:text-7xl text-parchment-50"
+        className="text-4xl sm:text-5xl md:text-7xl text-parchment-50"
       />
-      <p className="mt-6 max-w-2xl text-parchment-100/75">
+      <p className="mt-5 max-w-2xl text-sm text-parchment-100/75 sm:text-base md:mt-6">
         Три экскурсии можно проходить в любом порядке, но они выстроены хронологически —
         каждый следующий зал отвечает на вопросы, поставленные в предыдущем.
       </p>
 
-      <div className="mt-12 space-y-6">
+      <div className="mt-8 space-y-4 sm:mt-12 sm:space-y-6">
         {excursions.map((e, i) => {
           const r = results[e.id]
           const visitedStops = e.stops.filter((s) => visited[s.id]).length
@@ -34,43 +34,43 @@ export default function MainHallPage() {
             >
               <Link
                 to={`/excursion/${e.id}`}
-                className="group relative block overflow-hidden rounded-3xl border border-parchment-50/10 bg-ink-900/40 p-6 transition hover:border-accent-gold/40 hover:bg-ink-900/70 md:p-10"
+                className="group relative block overflow-hidden rounded-3xl border border-parchment-50/10 bg-ink-900/40 p-5 transition hover:border-accent-gold/40 hover:bg-ink-900/70 sm:p-6 md:p-10"
               >
                 <div
-                  className="absolute inset-y-0 right-0 -z-10 w-1/2 opacity-30 transition group-hover:opacity-50"
+                  className="absolute inset-y-0 right-0 -z-10 w-full opacity-25 transition group-hover:opacity-40 md:w-1/2 md:opacity-30 md:group-hover:opacity-50"
                   style={{
                     background: `radial-gradient(60% 80% at 70% 50%, ${e.palette.accent}55, transparent 70%)`,
                   }}
                 />
 
-                <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
                   <div className="max-w-2xl">
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
                       <span className="font-mono text-xs text-accent-gold/80">
                         Экскурсия №{e.number}
                       </span>
-                      <span className="h-1 w-1 rounded-full bg-parchment-100/30" />
+                      <span className="hidden h-1 w-1 rounded-full bg-parchment-100/30 sm:block" />
                       <span className="num-mono text-xs text-parchment-100/55">{e.period}</span>
-                      <span className="h-1 w-1 rounded-full bg-parchment-100/30" />
+                      <span className="hidden h-1 w-1 rounded-full bg-parchment-100/30 sm:block" />
                       <span className="num-mono text-xs text-parchment-100/55">{e.duration}</span>
                     </div>
-                    <h2 className="mt-4 heading-serif text-4xl text-parchment-50 md:text-5xl">
+                    <h2 className="mt-3 heading-serif text-2xl text-parchment-50 sm:text-3xl md:mt-4 md:text-5xl">
                       {e.title}
                     </h2>
-                    <p className="mt-3 text-parchment-100/70">{e.subtitle}</p>
+                    <p className="mt-3 text-sm text-parchment-100/70 sm:text-base">{e.subtitle}</p>
                     <p className="mt-3 text-sm leading-relaxed text-parchment-100/55">
                       {e.summary}
                     </p>
                   </div>
 
-                  <div className="flex shrink-0 flex-col items-start gap-4 md:items-end">
+                  <div className="flex shrink-0 flex-row items-center justify-between gap-4 md:flex-col md:items-end md:justify-start">
                     <ProgressRing visited={visitedStops} total={e.stops.length} />
                     {r ? (
                       <div className="text-right text-xs">
                         <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
                           результат теста
                         </div>
-                        <div className="num-display mt-1 text-3xl font-medium text-parchment-50">
+                        <div className="num-display mt-1 text-2xl font-medium text-parchment-50 sm:text-3xl">
                           {r.correct}/{r.total}
                         </div>
                       </div>
@@ -79,11 +79,18 @@ export default function MainHallPage() {
                         тест ещё не пройден
                       </div>
                     )}
-                    <span className="btn-primary">
+                    <span className="btn-primary hidden md:inline-flex">
                       Начать
                       <span className="transition group-hover:translate-x-1">→</span>
                     </span>
                   </div>
+                </div>
+
+                <div className="mt-5 md:hidden">
+                  <span className="btn-primary w-full">
+                    Начать
+                    <span className="transition group-hover:translate-x-1">→</span>
+                  </span>
                 </div>
               </Link>
             </motion.div>

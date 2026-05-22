@@ -32,11 +32,16 @@ interface TimelineSceneProps {
  * golden particles drifts along the curve to suggest the flow of time.
  */
 export default function TimelineScene(props: TimelineSceneProps) {
+  // Narrower viewports need a wider FOV so the timeline curve still fits
+  const isMobile =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(max-width: 640px)').matches
+  const fov = isMobile ? 64 : 50
   return (
     <Canvas
       dpr={[1, 1.75]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ position: [0, 1, 6], fov: 50 }}
+      camera={{ position: [0, 1, 6], fov }}
     >
       <Suspense fallback={null}>
         <Scene {...props} />

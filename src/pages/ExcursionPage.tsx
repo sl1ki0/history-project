@@ -344,7 +344,7 @@ function ExcursionPageInner() {
 
   if (!excursion) {
     return (
-      <div className="container-prose py-40 text-center text-parchment-100/70">
+      <div className="container-prose py-24 text-center text-parchment-100/70 sm:py-40">
         Экскурсия не найдена.{' '}
         <Link to="/hall" className="text-accent-gold underline">
           Вернуться в главный зал
@@ -408,7 +408,7 @@ function ExcursionPageInner() {
       {/* 3D timeline hero */}
       <section
         ref={timelineSectionRef}
-        className="relative h-[58vh] min-h-[420px] w-full overflow-hidden"
+        className="relative h-[42vh] min-h-[280px] w-full overflow-hidden sm:h-[50vh] sm:min-h-[360px] md:h-[58vh] md:min-h-[420px]"
       >
         <Suspense fallback={<div className="absolute inset-0 grid place-items-center text-parchment-100/40">Открываем зал...</div>}>
           <TimelineScene
@@ -422,7 +422,7 @@ function ExcursionPageInner() {
           />
         </Suspense>
 
-        <div className="pointer-events-none absolute left-6 top-6 md:left-10">
+        <div className="pointer-events-none absolute left-4 top-4 sm:left-6 sm:top-6 md:left-10">
           <motion.div
             key={'badge-' + active}
             initial={{ opacity: 0, y: -8 }}
@@ -437,17 +437,17 @@ function ExcursionPageInner() {
           </motion.div>
         </div>
 
-        <div className="pointer-events-none absolute right-6 top-6 md:right-10">
-          <div className="num-mono rounded-full border border-parchment-50/15 bg-ink-950/40 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-parchment-100/75 backdrop-blur">
+        <div className="pointer-events-none absolute right-4 top-4 sm:right-6 sm:top-6 md:right-10">
+          <div className="num-mono rounded-full border border-parchment-50/15 bg-ink-950/40 px-2.5 py-1 text-[10px] uppercase tracking-[0.22em] text-parchment-100/75 backdrop-blur sm:px-3">
             {excursion.period}
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-1.5 text-center">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-parchment-100/45">
+        <div className="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-1.5 px-4 text-center">
+          <div className="text-[9px] uppercase tracking-[0.25em] text-parchment-100/45 sm:text-[10px] sm:tracking-[0.3em]">
             {tourActive
               ? 'Аудиоэкскурсия идёт — навигация заблокирована'
-              : 'Кликните по любому узлу или используйте кнопки внизу'}
+              : 'Кликните по узлу или используйте кнопки внизу'}
           </div>
           <div className="h-px w-12 bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
         </div>
@@ -456,7 +456,7 @@ function ExcursionPageInner() {
       </section>
 
       {/* Stage content */}
-      <div ref={stageContentRef}>
+      <div ref={stageContentRef} className="pb-24 sm:pb-16">
         <AnimatePresence mode="wait">
           {stage === 'intro' && (
             <motion.div
@@ -550,13 +550,13 @@ function ExcursionHeader({
   locked: boolean
 }) {
   return (
-    <div className="container-prose pt-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <div className="num-mono text-xs uppercase tracking-[0.25em] text-accent-gold/80">
+    <div className="container-prose pt-4 sm:pt-6">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:gap-4">
+        <div className="min-w-0">
+          <div className="num-mono text-[11px] uppercase tracking-[0.2em] text-accent-gold/80 sm:text-xs sm:tracking-[0.25em]">
             Экскурсия №{excursion.number} · {excursion.period}
           </div>
-          <h1 className="mt-1 heading-serif text-3xl text-parchment-50 md:text-4xl">
+          <h1 className="mt-1 heading-serif text-2xl text-parchment-50 sm:text-3xl md:text-4xl">
             {excursion.title}
           </h1>
         </div>
@@ -568,7 +568,7 @@ function ExcursionHeader({
         </Link>
       </div>
 
-      <div className="mt-6 flex items-center gap-1 overflow-x-auto pb-2">
+      <div className="mt-5 flex items-center gap-1 overflow-x-auto pb-2 sm:mt-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <StageDot
           active={active === 0}
           label="Вступление"
@@ -640,30 +640,30 @@ function IntroStage({
   tourActive: boolean
 }) {
   return (
-    <section className="container-prose py-10 md:py-16">
+    <section className="container-prose py-8 sm:py-10 md:py-16">
       <AnimatedHeading
         eyebrow={excursion.subtitle}
         text={excursion.title}
-        className="text-5xl md:text-7xl text-parchment-50"
+        className="text-4xl sm:text-5xl md:text-7xl text-parchment-50"
       />
 
-      <div className="mt-10 grid gap-8 md:grid-cols-3">
-        <div className="md:col-span-2 space-y-6">
+      <div className="mt-8 grid gap-6 sm:mt-10 sm:gap-8 md:grid-cols-3">
+        <div className="space-y-5 sm:space-y-6 md:col-span-2">
           {/* CTA: launch the auto-tour */}
           <AutoTourCTA onStart={onStartTour} disabled={tourActive} />
 
-          <div className="rounded-2xl border border-parchment-50/10 p-6">
+          <div className="rounded-2xl border border-parchment-50/10 p-5 sm:p-6">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Цель экскурсии
             </div>
-            <p className="mt-2 text-parchment-100/85 leading-relaxed">{excursion.goal}</p>
+            <p className="mt-2 text-sm leading-relaxed text-parchment-100/85 sm:text-base">{excursion.goal}</p>
           </div>
 
-          <div className="rounded-2xl border border-parchment-50/10 p-6">
+          <div className="rounded-2xl border border-parchment-50/10 p-5 sm:p-6">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Слово экскурсовода
             </div>
-            <p className="mt-3 text-lg leading-relaxed text-parchment-50">{excursion.intro}</p>
+            <p className="mt-3 text-base leading-relaxed text-parchment-50 sm:text-lg">{excursion.intro}</p>
             <div className="mt-4">
               <NarrationControls
                 text={excursion.intro}
@@ -674,15 +674,15 @@ function IntroStage({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-parchment-50/10 p-6">
-            <div className="mb-4 text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
+          <div className="rounded-2xl border border-parchment-50/10 p-5 sm:p-6">
+            <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-accent-gold/80 sm:mb-4">
               План экскурсии — кликабельный
             </div>
             <ol className="divide-y divide-parchment-50/5">
               {excursion.stops.map((s, i) => (
                 <li
                   key={s.id}
-                  className="group flex items-baseline gap-5 py-3.5 first:pt-0 last:pb-0"
+                  className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 first:pt-0 last:pb-0 sm:flex-nowrap sm:gap-5 sm:py-3.5"
                 >
                   <button
                     onClick={() => !tourActive && jumpTo(i + 1)}
@@ -694,16 +694,16 @@ function IntroStage({
                   <button
                     onClick={() => !tourActive && jumpTo(i + 1)}
                     disabled={tourActive}
-                    className="flex-1 min-w-0 text-left disabled:cursor-not-allowed"
+                    className="order-3 w-full min-w-0 text-left disabled:cursor-not-allowed sm:order-none sm:w-auto sm:flex-1"
                   >
                     <div className="text-[10px] uppercase tracking-[0.22em] text-parchment-100/45">
                       {s.subtopic}
                     </div>
-                    <div className="mt-0.5 heading-serif text-[1.05rem] leading-snug text-parchment-50 group-hover:text-accent-gold transition">
+                    <div className="mt-0.5 heading-serif text-base leading-snug text-parchment-50 group-hover:text-accent-gold transition sm:text-[1.05rem]">
                       {s.title}
                     </div>
                   </button>
-                  <span className="num-mono shrink-0 text-[11px] uppercase text-parchment-100/55">
+                  <span className="num-mono ml-auto shrink-0 text-[11px] uppercase text-parchment-100/55 sm:ml-0">
                     {s.date}
                   </span>
                 </li>
@@ -712,24 +712,24 @@ function IntroStage({
           </div>
         </div>
 
-        <aside className="space-y-4">
-          <div className="glass rounded-2xl p-5">
+        <aside className="grid grid-cols-2 gap-3 sm:gap-4 md:flex md:flex-col md:space-y-0">
+          <div className="glass rounded-2xl p-4 sm:p-5">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Период
             </div>
-            <div className="num-display mt-2 text-3xl font-medium text-parchment-50">
+            <div className="num-display mt-2 text-xl font-medium text-parchment-50 sm:text-2xl md:text-3xl">
               {excursion.period}
             </div>
           </div>
-          <div className="glass rounded-2xl p-5">
+          <div className="glass rounded-2xl p-4 sm:p-5">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Длительность
             </div>
-            <div className="num-display mt-2 text-3xl font-medium text-parchment-50">
+            <div className="num-display mt-2 text-xl font-medium text-parchment-50 sm:text-2xl md:text-3xl">
               {excursion.duration}
             </div>
           </div>
-          <div className="glass rounded-2xl p-5">
+          <div className="glass col-span-2 rounded-2xl p-4 sm:p-5 md:col-span-1">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Темы
             </div>
@@ -756,7 +756,7 @@ function AutoTourCTA({ onStart, disabled }: { onStart: () => void; disabled: boo
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className="relative overflow-hidden rounded-2xl border border-accent-gold/30 bg-gradient-to-br from-accent-gold/15 via-ink-900/40 to-ink-950 p-6"
+      className="relative overflow-hidden rounded-2xl border border-accent-gold/30 bg-gradient-to-br from-accent-gold/15 via-ink-900/40 to-ink-950 p-5 sm:p-6"
     >
       <div
         className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full opacity-40"
@@ -770,7 +770,7 @@ function AutoTourCTA({ onStart, disabled }: { onStart: () => void; disabled: boo
           <div className="text-[10px] uppercase tracking-[0.3em] text-accent-gold/85">
             Новый формат
           </div>
-          <div className="heading-serif mt-1 text-2xl text-parchment-50 md:text-3xl">
+          <div className="heading-serif mt-1 text-xl text-parchment-50 sm:text-2xl md:text-3xl">
             Прослушать экскурсию целиком
           </div>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-parchment-100/75">
@@ -782,7 +782,7 @@ function AutoTourCTA({ onStart, disabled }: { onStart: () => void; disabled: boo
         <button
           onClick={onStart}
           disabled={disabled}
-          className="btn-primary shrink-0 disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-primary w-full shrink-0 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
         >
           <HeadphonesIcon /> Запустить аудиоэкскурсию
         </button>
@@ -815,8 +815,8 @@ function StopStage({
   const stop = excursion.stops[stopIndex]
 
   return (
-    <section className="container-prose py-10 md:py-14">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
+    <section className="container-prose py-8 sm:py-10 md:py-14">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
         <div className="chip">{stop.subtopic}</div>
         <div className="num-mono text-[11px] uppercase tracking-[0.18em] text-parchment-100/55">
           Остановка <span className="text-parchment-50">{stopIndex + 1}</span> из{' '}
@@ -827,18 +827,18 @@ function StopStage({
       <AnimatedHeading
         text={stop.title}
         as="h2"
-        className="mt-5 text-4xl md:text-6xl text-parchment-50"
+        className="mt-4 text-3xl sm:text-4xl md:text-6xl text-parchment-50 sm:mt-5"
       />
 
-      <div className="mt-10 grid gap-10 md:grid-cols-3">
-        <div className="md:col-span-2 space-y-6">
+      <div className="mt-8 grid gap-8 sm:mt-10 sm:gap-10 md:grid-cols-3">
+        <div className="space-y-5 sm:space-y-6 md:col-span-2">
           {stop.narration.map((p, i) => (
             <motion.p
               key={i}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.15 + i * 0.1 }}
-              className={`text-base md:text-lg leading-relaxed ${
+              className={`text-sm leading-relaxed sm:text-base md:text-lg ${
                 i === 0 ? 'text-parchment-50' : 'text-parchment-100/85'
               }`}
             >
@@ -846,7 +846,7 @@ function StopStage({
             </motion.p>
           ))}
 
-          <div className="pt-4">
+          <div className="pt-2 sm:pt-4">
             <NarrationControls
               text={stripSourceMarkers(stop.narration.join(' '))}
               reKey={`${excursion.id}-${stop.id}`}
@@ -856,24 +856,24 @@ function StopStage({
           </div>
         </div>
 
-        <aside className="space-y-3">
-          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-5">
+        <aside className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-1">
+          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-4 sm:p-5">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               На таймлайне
             </div>
-            <div className="num-display mt-2 text-2xl font-medium text-parchment-50">
+            <div className="num-display mt-2 text-xl font-medium text-parchment-50 sm:text-2xl">
               {stop.date}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-5">
+          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-4 sm:p-5">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Опорный документ
             </div>
-            <div className="mt-2 text-sm text-parchment-50 leading-snug">{stop.caption}</div>
+            <div className="mt-2 text-sm leading-snug text-parchment-50">{stop.caption}</div>
           </div>
 
-          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-5">
+          <div className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-4 sm:p-5">
             <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
               Контекст
             </div>
@@ -891,35 +891,35 @@ function StopStage({
 
 function SourcesStage({ excursion }: { excursion: (typeof excursions)[number] }) {
   return (
-    <section className="container-prose py-12 md:py-16">
+    <section className="container-prose py-8 sm:py-12 md:py-16">
       <div className="chip">источники экскурсии №{excursion.number}</div>
       <AnimatedHeading
         text={`Список источников`}
         as="h2"
-        className="mt-4 text-4xl md:text-6xl text-parchment-50"
+        className="mt-4 text-3xl sm:text-4xl md:text-6xl text-parchment-50"
       />
-      <p className="mt-4 max-w-2xl text-parchment-100/70">{excursion.outro}</p>
+      <p className="mt-4 max-w-2xl text-sm text-parchment-100/70 sm:text-base">{excursion.outro}</p>
 
-      <ol className="mt-10 grid gap-3 md:grid-cols-2">
+      <ol className="mt-8 grid gap-3 sm:mt-10 md:grid-cols-2">
         {excursion.sources.map((s) => (
           <li
             key={s.n}
-            className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-5 transition hover:border-accent-gold/40"
+            className="rounded-2xl border border-parchment-50/10 bg-ink-900/40 p-4 transition hover:border-accent-gold/40 sm:p-5"
           >
-            <div className="flex items-baseline gap-3">
-              <span className="num-mono text-xs text-accent-gold/80">[{s.n}]</span>
+            <div className="flex items-baseline gap-2.5 sm:gap-3">
+              <span className="num-mono shrink-0 text-xs text-accent-gold/80">[{s.n}]</span>
               <a
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-baseline gap-2 text-parchment-50 hover:text-accent-gold"
+                className="group inline-flex min-w-0 items-baseline gap-2 break-words text-parchment-50 hover:text-accent-gold"
               >
-                <span className="underline-offset-4 group-hover:underline">{s.title}</span>
-                <span className="text-xs">↗</span>
+                <span className="break-words underline-offset-4 group-hover:underline">{s.title}</span>
+                <span className="shrink-0 text-xs">↗</span>
               </a>
             </div>
             {s.publisher && (
-              <div className="mt-1.5 ml-9 text-xs uppercase tracking-[0.18em] text-parchment-100/45">
+              <div className="ml-8 mt-1.5 text-xs uppercase tracking-[0.18em] text-parchment-100/45 sm:ml-9">
                 {s.publisher} · {sourceTypeLabel(s.type)}
               </div>
             )}
@@ -947,16 +947,18 @@ function Navigator({
 }) {
   const pct = ((active + 1) / totalNodes) * 100
   return (
-    <div className="sticky bottom-4 z-30 mx-auto mt-12 w-full max-w-5xl px-6 md:px-10">
-      <div className="glass flex items-center justify-between gap-4 rounded-full px-3 py-2">
+    <div className="sticky bottom-3 z-30 mx-auto mt-12 w-full max-w-5xl px-3 sm:bottom-4 sm:px-6 md:px-10">
+      <div className="glass flex items-center justify-between gap-2 rounded-full p-2 sm:gap-4 sm:px-3">
         <button
           onClick={onPrev}
           disabled={active === 0}
-          className="btn-ghost disabled:cursor-not-allowed disabled:opacity-30"
+          className="btn-ghost shrink-0 !px-3 !py-2 disabled:cursor-not-allowed disabled:opacity-30 sm:!px-4"
+          aria-label="Назад"
         >
-          ← Назад
+          <span aria-hidden>←</span>
+          <span className="hidden sm:inline">Назад</span>
         </button>
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <div className="h-[3px] w-full overflow-hidden rounded-full bg-parchment-50/10">
             <motion.div
               className="h-full rounded-full bg-accent-gold"
@@ -965,8 +967,8 @@ function Navigator({
             />
           </div>
         </div>
-        <button onClick={onNext} className="btn-primary">
-          {isLast ? 'К тесту' : 'Дальше'} →
+        <button onClick={onNext} className="btn-primary shrink-0 !px-4 !py-2 sm:!px-6 sm:!py-2.5">
+          {isLast ? 'К тесту' : 'Дальше'} <span aria-hidden>→</span>
         </button>
       </div>
     </div>

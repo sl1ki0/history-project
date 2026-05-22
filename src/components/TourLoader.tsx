@@ -70,7 +70,7 @@ export default function TourLoader({
         ))}
       </div>
 
-      <div className="relative flex max-w-xl flex-col items-center gap-8 px-8 text-center">
+      <div className="relative flex max-w-xl flex-col items-center gap-6 px-5 text-center sm:gap-8 sm:px-8">
         {/* eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: -4 }}
@@ -82,7 +82,7 @@ export default function TourLoader({
         </motion.div>
 
         {/* main ring */}
-        <div className="relative h-44 w-44">
+        <div className="relative h-36 w-36 sm:h-44 sm:w-44">
           {/* outer faint ring */}
           <div className="absolute inset-0 rounded-full border border-parchment-50/8" />
           {/* dotted middle */}
@@ -126,7 +126,7 @@ export default function TourLoader({
           {/* center number */}
           <div className="absolute inset-0 grid place-items-center">
             <div className="flex flex-col items-center">
-              <div className="num-display text-5xl font-medium text-parchment-50">
+              <div className="num-display text-4xl font-medium text-parchment-50 sm:text-5xl">
                 {pct}%
               </div>
               <div className="num-mono mt-1 text-[10px] uppercase tracking-[0.3em] text-parchment-100/45">
@@ -142,11 +142,11 @@ export default function TourLoader({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.18 }}
-            className="heading-serif text-3xl text-parchment-50 md:text-4xl"
+            className="heading-serif text-2xl text-parchment-50 sm:text-3xl md:text-4xl"
           >
             Готовим вашу экскурсию
           </motion.h2>
-          <p className="text-sm leading-relaxed text-parchment-100/65">
+          <p className="text-xs leading-relaxed text-parchment-100/65 sm:text-sm">
             Мы заранее озвучиваем каждую остановку, чтобы рассказ шёл без пауз
             на генерацию. Это займёт чуть-чуть времени.
           </p>

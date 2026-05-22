@@ -116,7 +116,7 @@ export default function NarrationControls({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="mt-2 rounded-2xl border border-parchment-50/10 bg-ink-900/50 p-4">
+            <div className="mt-2 rounded-2xl border border-parchment-50/10 bg-ink-900/50 p-3 sm:p-4">
               <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
                 Голос экскурсовода
               </div>
@@ -144,7 +144,7 @@ export default function NarrationControls({
                   <div className="text-[10px] uppercase tracking-[0.25em] text-parchment-100/55">
                     Тембр
                   </div>
-                  <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+                  <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
                     {PIPER_VOICES.map((v) => (
                       <button
                         key={v.id}

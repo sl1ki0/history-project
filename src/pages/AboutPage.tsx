@@ -14,30 +14,30 @@ export default function AboutPage() {
   const totalQ = Object.values(results).reduce((a, r) => a + r.total, 0)
 
   return (
-    <PageTransition className="container-prose py-16">
+    <PageTransition className="container-prose py-10 sm:py-16">
       <AnimatedHeading
         eyebrow="о музее"
         text={museum.fullName}
-        className="text-5xl md:text-7xl text-parchment-50"
+        className="text-4xl sm:text-5xl md:text-7xl text-parchment-50"
       />
 
-      <div className="mt-10 grid gap-10 md:grid-cols-3">
-        <div className="md:col-span-2 space-y-8">
+      <div className="mt-8 grid gap-8 sm:mt-10 sm:gap-10 md:grid-cols-3">
+        <div className="space-y-6 sm:space-y-8 md:col-span-2">
           <Section title="Миссия музея">
             <p className="text-parchment-100/80 leading-relaxed">{museum.mission}</p>
           </Section>
 
           <Section title="Характерные черты">
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
               {museum.characteristics.map((c) => (
                 <li
                   key={c.label}
-                  className="glass rounded-2xl p-5"
+                  className="glass rounded-2xl p-4 sm:p-5"
                 >
                   <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
                     {c.label}
                   </div>
-                  <div className="num-display mt-2 text-xl font-medium text-parchment-50">{c.value}</div>
+                  <div className="num-display mt-2 text-lg font-medium text-parchment-50 sm:text-xl">{c.value}</div>
                 </li>
               ))}
             </ul>
@@ -59,9 +59,9 @@ export default function AboutPage() {
               {excursions.map((e) => (
                 <div
                   key={e.id}
-                  className="rounded-2xl border border-parchment-50/10 p-5"
+                  className="rounded-2xl border border-parchment-50/10 p-4 sm:p-5"
                 >
-                  <div className="flex items-baseline justify-between">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                     <div className="num-mono text-xs text-accent-gold/80">
                       №{e.number} · {e.period}
                     </div>
@@ -69,7 +69,7 @@ export default function AboutPage() {
                       {e.stops.length} остановок · {e.quiz.length} вопросов
                     </div>
                   </div>
-                  <h3 className="mt-2 heading-serif text-2xl text-parchment-50">{e.title}</h3>
+                  <h3 className="mt-2 heading-serif text-xl text-parchment-50 sm:text-2xl">{e.title}</h3>
                   <p className="mt-1 text-sm text-parchment-100/70">{e.goal}</p>
                 </div>
               ))}
@@ -77,7 +77,7 @@ export default function AboutPage() {
           </Section>
 
           <Section title="Методология">
-            <p className="text-parchment-100/80 leading-relaxed">
+            <p className="text-sm leading-relaxed text-parchment-100/80 sm:text-base">
               Каждое утверждение в текстах экскурсовода привязано к номеру источника в
               квадратных скобках, а в конце экскурсии находится нумерованный
               библиографический список с активными гиперссылками. Приоритет отдан
@@ -89,18 +89,18 @@ export default function AboutPage() {
           </Section>
         </div>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6 md:order-last">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="glass rounded-3xl p-6"
+            className="glass rounded-3xl p-5 sm:p-6"
           >
             <div className="text-[10px] uppercase tracking-[0.3em] text-accent-gold/80">
               Ваш прогресс
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <div className="num-display text-5xl font-semibold text-parchment-50">{xp}</div>
+              <div className="num-display text-4xl font-semibold text-parchment-50 sm:text-5xl">{xp}</div>
               <div className="text-sm uppercase tracking-[0.2em] text-parchment-100/50">XP</div>
             </div>
             <div className="mt-1 text-sm text-parchment-100/55">
@@ -148,7 +148,7 @@ export default function AboutPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="heading-serif text-2xl text-parchment-50">{title}</h2>
+      <h2 className="heading-serif text-xl text-parchment-50 sm:text-2xl">{title}</h2>
       <div className="gold-divider my-3 w-16" />
       <div>{children}</div>
     </section>
