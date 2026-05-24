@@ -138,6 +138,42 @@
 .gsap-reveal { will-change: transform, opacity; }
 .gsap-char { display: inline-block; will-change: transform, opacity; }
 
+/* Dual range slider on the map timeline — two transparent inputs overlap, only thumb is visible.
+   Track is drawn by the parent div; here we only style the thumb so both handles look identical. */
+.timeline-range {
+  pointer-events: none;        /* only thumb captures pointer */
+  outline: none;
+}
+.timeline-range::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #c9a25a;
+  border: 2px solid #f7f1e6;
+  box-shadow: 0 0 0 4px rgba(201,162,90,0.18), 0 4px 14px -4px rgba(0,0,0,0.6);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+.timeline-range::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.08); }
+.timeline-range::-moz-range-thumb {
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #c9a25a;
+  border: 2px solid #f7f1e6;
+  box-shadow: 0 0 0 4px rgba(201,162,90,0.18), 0 4px 14px -4px rgba(0,0,0,0.6);
+  cursor: grab;
+}
+.timeline-range::-webkit-slider-runnable-track { background: transparent; }
+.timeline-range::-moz-range-track { background: transparent; }
+.timeline-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(201,162,90,0.45), 0 4px 14px -4px rgba(0,0,0,0.6);
+}
+
 /* For respect to reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

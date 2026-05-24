@@ -57,6 +57,7 @@ export default function Header() {
         <nav className="hidden items-center gap-4 md:flex lg:gap-6">
           <NavItem to="/" end label="Вход" />
           <NavItem to="/hall" label="Главный зал" />
+          <NavItem to="/map" label="Карта" />
           <NavItem to="/about" label="О музее" />
         </nav>
 
@@ -109,6 +110,7 @@ export default function Header() {
               <div className="flex flex-col gap-1 py-2">
                 <MobileNavItem to="/" end label="Вход" onSelect={() => setMenuOpen(false)} />
                 <MobileNavItem to="/hall" label="Главный зал" onSelect={() => setMenuOpen(false)} />
+                <MobileNavItem to="/map" label="Карта событий" onSelect={() => setMenuOpen(false)} />
                 <MobileNavItem to="/about" label="О музее" onSelect={() => setMenuOpen(false)} />
               </div>
 
