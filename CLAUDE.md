@@ -32,7 +32,7 @@ src/
 │   ├── types.ts           Excursion / SlideStop / Source / QuizQuestion types
 │   ├── excursion1.ts      1991–1999  (5 stops, 5 quiz, 16 sources)
 │   ├── excursion2.ts      2000–2008  (4 stops, 5 quiz, 12 sources)
-│   ├── excursion3.ts      2008–2022  (6 stops, 6 quiz, 14 sources)
+│   ├── excursion3.ts      2008–2022  (7 stops, 7 quiz, 17 sources)
 │   └── index.ts           export const excursions; museum metadata
 ├── pages/                 Route components, each wrapped in PageTransition
 ├── components/            Header / Footer / Layout / AnimatedHeading / NarrationControls
