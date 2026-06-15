@@ -9,8 +9,6 @@ import LoadingScreen from './components/LoadingScreen'
 const MainHallPage = lazy(() => import('./pages/MainHallPage'))
 const ExcursionPage = lazy(() => import('./pages/ExcursionPage'))
 const QuizPage = lazy(() => import('./pages/QuizPage'))
-const MapPage = lazy(() => import('./components/map/MapPage'))
-
 export default function App() {
   const location = useLocation()
   return (
@@ -23,7 +21,6 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/excursion/:id" element={<ExcursionPage />} />
             <Route path="/excursion/:id/quiz" element={<QuizPage />} />
-            <Route path="/map" element={<MapPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>

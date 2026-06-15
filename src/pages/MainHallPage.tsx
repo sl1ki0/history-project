@@ -21,53 +21,7 @@ export default function MainHallPage() {
         каждый следующий зал отвечает на вопросы, поставленные в предыдущем.
       </p>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.05 }}
-        className="mt-8 sm:mt-12"
-      >
-        <Link
-          to="/map"
-          className="group relative flex flex-col items-start gap-4 overflow-hidden rounded-3xl border border-accent-gold/20 bg-ink-900/40 p-5 transition hover:border-accent-gold/60 hover:bg-ink-900/70 sm:flex-row sm:items-center sm:justify-between sm:p-6"
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-2/3 opacity-50 transition group-hover:opacity-80"
-            style={{
-              background:
-                'radial-gradient(60% 80% at 70% 50%, rgba(201,162,90,0.18), transparent 70%)',
-            }}
-          />
-          <div className="flex items-start gap-4">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-accent-gold/40 bg-accent-gold/10 text-accent-gold">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M9 2L3 5v17l6-3 6 3 6-3V2l-6 3-6-3z" />
-                <line x1="9" y1="2" x2="9" y2="19" />
-                <line x1="15" y1="5" x2="15" y2="22" />
-              </svg>
-            </span>
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.28em] text-accent-gold/80">
-                Интерактивная карта
-              </div>
-              <div className="heading-serif mt-1 text-xl text-parchment-50 sm:text-2xl">
-                География событий 1991–2022
-              </div>
-              <p className="mt-1 max-w-md text-sm text-parchment-100/65">
-                17 узловых событий, разнесённых по регионам РФ — от Беловежья до Сочи и Сахалина.
-                Зум, фильтры и таймлайн.
-              </p>
-            </div>
-          </div>
-          <span className="btn-primary self-end sm:self-auto">
-            Открыть карту
-            <span className="transition group-hover:translate-x-1">→</span>
-          </span>
-        </Link>
-      </motion.div>
-
-      <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-6">
+      <div className="mt-8 space-y-4 sm:mt-12 sm:space-y-6">
         {excursions.map((e, i) => {
           const r = results[e.id]
           const visitedStops = e.stops.filter((s) => visited[s.id]).length
