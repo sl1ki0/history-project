@@ -92,23 +92,39 @@ function Pillars() {
   return (
     <section className="container-prose py-12 md:py-24">
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:gap-6">
-        {items.map((it, i) => (
-          <motion.div
-            key={it.label}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, delay: i * 0.08 }}
-            className="glass rounded-2xl p-4 sm:p-5 md:p-6"
-          >
-            <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
-              {it.label}
-            </div>
-            <div className="num-display mt-2 text-xl font-medium text-parchment-50 sm:text-2xl md:text-3xl">
-              {it.value}
-            </div>
-          </motion.div>
-        ))}
+        {items.map((it, i) => {
+          // Числовые значения (период, структура) — display-шрифт с tabular-nums;
+          // текстовые (тематика, формат) — обычный читаемый шрифт.
+          const isNumeric = (it.value.match(/\d/g)?.length ?? 0) >= 2
+          // Крупный размер только для коротких значений (год), иначе длинные
+          // строки переполняют карточку — даём им компактный, аккуратный размер.
+          const isShort = it.value.length <= 14
+          const sizeClass =
+            isNumeric && isShort
+              ? 'text-xl sm:text-2xl md:text-3xl'
+              : 'text-base sm:text-lg md:text-xl'
+          return (
+            <motion.div
+              key={it.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.6, delay: i * 0.08 }}
+              className="glass rounded-2xl p-4 sm:p-5 md:p-6"
+            >
+              <div className="text-[10px] uppercase tracking-[0.25em] text-accent-gold/80">
+                {it.label}
+              </div>
+              <div
+                className={`mt-2 leading-snug text-parchment-50 ${
+                  isNumeric ? 'num-display font-medium' : 'font-normal'
+                } ${sizeClass}`}
+              >
+                {it.value}
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </section>
   )
